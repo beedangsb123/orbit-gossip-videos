@@ -64,7 +64,20 @@ landmarks, geography or mega-builds here.
 - Encode: 1080x1920, 30 fps, -b:v 5200k, < 90 MB; run check_edges.py (must PASS) and listen-check line lengths.
 
 ## Posting (Metricool brand 8377975) — 4 single-network posts at the same time
-- Daily main video at **19:00 Australia/Sydney** (never two main videos on one day, never in the past).
+- **Audience focus: USA first, then UK/Canada/Australia/Europe (high-CPM).** Captions in US English (but keep metric +
+  imperial where a number matters, e.g. "7,000 km/h (4,300 mph)").
+- **Posting-time experiment (Bidhan 2026-11-26: "experiment with the right time", auto-upload, never ask him):** each daily
+  run (starts ~15:53 Sydney) schedules its video for the NEXT Sydney day at the next slot in this rotation (track in LOG.md):
+  | Slot | Sydney (AEDT) | US East / West | UK |
+  |---|---|---|---|
+  | A | 11:00 | 7 pm / 4 pm | midnight |
+  | B | 13:00 | 9 pm / 6 pm | 2 am |
+  | C | 09:00 | 5 pm / 2 pm | 10 pm |
+  | D | 07:00 | 3 pm / noon | 8 pm |
+  Video 001 = slot A (11:00 Fri 27 Nov = 7 pm ET US Thanksgiving). Rotate A→B→C→D. After 3 videos per slot, compare
+  24-hour views AND new followers per platform (Metricool); then keep the best slot per platform (they may differ) and
+  keep testing one challenger slot 1 day in 4. Re-check after US/AU daylight-saving changes (US: 8 Mar 2027; AU: 4 Apr 2027).
+  Never two main videos on one Sydney day, never in the past.
 - TikTok: short caption + #fyp, tiktokData.title. Instagram: REEL, caption + #reels, firstCommentText = engagement question.
   Facebook: REEL + title + #facebookreels. YouTube: type short, title with #shorts, tags, category SCIENCE_TECHNOLOGY,
   madeForKids false. Captions open with a question, 1 emoji, the key number, 5–6 hashtags, image credit line.
