@@ -17,17 +17,27 @@ YELLOW = hexc("FFE14D"); INK = hexc("140B24"); STARC = hexc("FFB15A")
 engine.CAP_ACCENT = hexc("FF5FB0")
 engine.SPK_TXT = {"M": (0.92, 0.97, 1.0), "F": (1.0, 0.95, 0.97), None: WHITE}
 
-meta = json.load(open("meta.json"))
-STARTS = []; _t = 0
-for m in meta: STARTS.append(_t); _t += m["dur"]
-DURS = [m["dur"] for m in meta]
+_meta = json.load(open("meta.json"))
+_S = json.load(open("script_el.json")) if os.path.exists("script_el.json") else {"lines": _meta}
+DROP = set(_S.get("drop", []))
+ORIG = [j for j in range(len(_S["lines"])) if j not in DROP]     # scene numbers (original line indices) that are kept
+assert len(ORIG) == len(_meta), (len(ORIG), len(_meta))
+META = dict(zip(ORIG, _meta))
+meta = _meta
+NSC = len(_S["lines"])                                             # end card = scene NSC
 END = 2.4
+ORDER = ORIG + [NSC]
+STARTS = []; DURS = []; _t = 0
+for j in ORIG: STARTS.append(_t); DURS.append(META[j]["dur"]); _t += META[j]["dur"]
 STARTS.append(_t); DURS.append(END)
 TOTAL = _t + END
+from collections import defaultdict
+ST = defaultdict(lambda: -1000.0, {o: STARTS[k] for k, o in enumerate(ORDER)})   # start time by scene number
 
 
 def wt(i, key, default):
-    for w in meta[i]["words"]:
+    if i not in META: return default
+    for w in META[i]["words"]:
         if w[0].lower().strip(".,!?'\"").startswith(key.lower()): return w[1]
     return default
 
@@ -70,40 +80,42 @@ def _bands():
 BANDS = _bands()
 
 
+_DISC = None
+DISC_R = 1063 / 1080 * 700   # planet radius inside hd_disc.png (1400 px square)
+
+
 def planet(c, cx, cy, r, t, light=(-0.7, -0.35), heat=0.0, terminator=0.0, spin=0.02, glints=1.0):
-    """draws a shaded, rotating banded sphere. light = 2-D direction TO the star (screen space).
-    terminator 0..1 sharpens day/night; heat 0..1 tints orange (thermometer scene)."""
-    r = max(8, r); x0, y0 = int(cx - r - 2), int(cy - r - 2); n = int(2 * r + 4)
-    yy, xx = np.mgrid[0:n, 0:n].astype(np.float32)
-    dx = (xx + x0 - cx) / r; dy = (yy + y0 - cy) / r; d2 = dx * dx + dy * dy
-    inside = d2 < 1.0; dz = np.sqrt(np.clip(1 - d2, 0, 1))
-    lon = (np.arctan2(dx, dz) / (2 * np.pi) + t * spin) % 1.0; lat = np.arcsin(np.clip(dy, -1, 1)) / np.pi + 0.5
-    tex = BANDS[(lat * 511).astype(int).clip(0, 511), (lon * 1023).astype(int).clip(0, 1023)]
-    lx, ly = light; lz = 0.55; ln = math.sqrt(lx * lx + ly * ly + lz * lz)
-    lam = (dx * lx + dy * ly + dz * lz) / ln
+    """REAL image: NASA/ESA/M. Kornmesser illustration of HD 189733b (CC BY 4.0), lit from the right.
+    heat tints it orange; terminator darkens the left half hard (day/night scene); glints = glass sparkles."""
+    global _DISC
+    if _DISC is None: _DISC = cairo.ImageSurface.create_from_png("hd_disc.png")
+    r = max(8, r)
+    g = cairo.RadialGradient(cx, cy, r * 0.95, cx, cy, r * 1.3)
+    g.add_color_stop_rgba(0, *CYAN, 0.30); g.add_color_stop_rgba(1, *CYAN, 0)
+    c.set_source(g); c.arc(cx, cy, r * 1.32, 0, 2 * math.pi); c.fill()
+    k = r / DISC_R
+    c.save(); c.arc(cx, cy, r, 0, 2 * math.pi); c.clip()
+    c.save(); c.translate(cx, cy); c.rotate(0.03 * math.sin(t * 0.4) + spin * t * 0.5); c.scale(k, k); c.translate(-700, -700)
+    c.set_source_surface(_DISC, 0, 0); c.get_source().set_filter(cairo.FILTER_GOOD); c.paint(); c.restore()
+    if heat > 0:
+        c.set_source_rgba(1.0, 0.42, 0.1, 0.55 * heat); c.paint()
     if terminator > 0:
-        shade = np.clip(lam * lerp(1.6, 6.0, terminator) + 0.15, 0.06, 1.15)
-    else:
-        shade = np.clip(lam * 1.25 + 0.18, 0.08, 1.15)
-    col = tex * shade[..., None]
-    if heat > 0: col = col * (1 - 0.55 * heat) + heat * 0.55 * np.array([1.0, 0.45, 0.15]) * shade[..., None]
-    rim = np.clip((d2 - 0.72) / 0.28, 0, 1) ** 2
-    col = col + rim[..., None] * np.array([0.35, 0.85, 1.0]) * 0.55
-    if glints > 0:   # tiny glass sparkles on the lit side
-        g = (np.sin(xx * 0.9 + t * 40) * np.sin(yy * 1.3 - t * 25) > 0.985) & (lam > 0.2)
-        col = col + g[..., None] * 0.9 * glints
-    alpha = np.clip((1 - d2) * r * 0.7, 0, 1) * inside
-    rgba = np.zeros((n, n, 4), np.uint8)
-    col = np.clip(col, 0, 1)
-    rgba[..., 0] = col[..., 2] * alpha * 255; rgba[..., 1] = col[..., 1] * alpha * 255; rgba[..., 2] = col[..., 0] * alpha * 255
-    rgba[..., 3] = alpha * 255
-    s = cairo.ImageSurface(cairo.FORMAT_ARGB32, n, n); st = s.get_stride()
-    np.ndarray((n, st // 4, 4), np.uint8, s.get_data())[:, :n, :] = rgba; s.mark_dirty()
-    # outer atmosphere glow
-    g = cairo.RadialGradient(cx, cy, r * 0.95, cx, cy, r * 1.28)
-    g.add_color_stop_rgba(0, *CYAN, 0.35); g.add_color_stop_rgba(1, *CYAN, 0)
-    c.set_source(g); c.arc(cx, cy, r * 1.3, 0, 2 * math.pi); c.fill()
-    c.set_source_surface(s, x0, y0); c.paint()
+        lg = cairo.LinearGradient(cx - r, 0, cx + r, 0)
+        lg.add_color_stop_rgba(0, 0, 0, 0.02, 0.92 * terminator); lg.add_color_stop_rgba(0.46, 0, 0, 0.02, 0.85 * terminator)
+        lg.add_color_stop_rgba(0.56, 0, 0, 0, 0); lg.add_color_stop_rgba(1, 0, 0, 0, 0)
+        c.set_source(lg); c.paint()
+    if glints > 0:
+        rr = np.random.default_rng(11)
+        for j in range(26):
+            a_, d_ = rr.random() * 2 * math.pi, math.sqrt(rr.random()) * 0.9
+            x = cx + math.cos(a_) * d_ * r; y = cy + math.sin(a_) * d_ * r
+            if x < cx - 0.1 * r: continue
+            tw = max(0.0, math.sin(t * (3 + 4 * rr.random()) + j)) ** 6
+            if tw < 0.05: continue
+            s_ = r * 0.035 * (0.5 + tw)
+            c.set_source_rgba(1, 1, 1, 0.9 * tw * glints); c.set_line_width(max(1, r * 0.006))
+            c.move_to(x - s_, y); c.line_to(x + s_, y); c.move_to(x, y - s_); c.line_to(x, y + s_); c.stroke()
+    c.restore()
 
 
 def star(c, x, y, r, t):
@@ -414,7 +426,7 @@ def gauge(c, cx, cy, r, v, vmax, t, label_="KM/H"):
     c.set_source_rgba(*PINK, a); c.set_line_width(12); c.set_line_cap(cairo.LINE_CAP_ROUND)
     c.move_to(cx, cy); c.line_to(cx + math.cos(an) * (r - 40), cy + math.sin(an) * (r - 40)); c.stroke()
     c.set_source_rgba(1, 1, 1, a); c.arc(cx, cy, 20, 0, 2 * math.pi); c.fill()
-    text(c, "{:,}".format(int(v)), cx, cy - 80, 110, col=WHITE, alpha=a, stroke=10)
+    text(c, "{:,}".format(int(round(v / 10) * 10)), cx, cy - 80, 110, col=WHITE, alpha=a, stroke=10)
     text(c, label_, cx, cy + 60, 48, col=YELLOW, alpha=a, stroke=8)
     c.restore()
 
@@ -513,7 +525,7 @@ def scorecard(c, t, pers_t):
 
 def hook_frame(c, t, k=1.0):
     background(c, t)
-    star(c, -40, 260, 150, t)
+    star(c, W + 40, 260, 150, t)
     planet(c, W / 2 + 40, 860, 400, t, light=(-0.9, -0.5))
     glass_rain(c, t, n=80, alpha=0.95 * k, region=(0, 420, W, 900), seed=1)
 
@@ -551,7 +563,7 @@ def s2(c, t, d):   # F Welcome to Orbit Gossip! Today's scandal: HD 189733b
     TP = wt(2, "HD", 2.6)
     if t > TP: sticker(c, "HD 189733b", W / 2, 1180, 96, t - TP, bg=PURPLE, outline=CYAN)
     if t > wt(2, "scandal", 2.0): sticker(c, "TODAY'S SCANDAL", W / 2, 1060, 54, t - wt(2, "scandal", 2.0), bg=YELLOW, fg=INK, outline=PINK, ang=0.03)
-    tag(c, "Planet illustration (ours) · Facts: NASA", t - 0.3, y=1262)
+    tag(c, "Image: NASA, ESA, M. Kornmesser (CC BY 4.0)", t - 0.3, y=1262)
 
 
 def s3(c, t, d):   # M not a name, a wifi password
@@ -570,7 +582,7 @@ def s4(c, t, d):   # F Rude! It's a celebrity.
 
 def s5(c, t, d):   # F Gorgeous, blue like Earth, 63 light-years
     background(c, t)
-    TL = wt(5, "63", 2.2)
+    TL = wt(5, "sixty", 2.2)
     if t < TL:
         planet(c, 380, 820, 280, t, light=(-0.8, -0.6))
         mini_globe(c, 840, 820, 120, t)
@@ -619,11 +631,11 @@ def s9(c, t, d):   # F chandelier in a hurricane, 8,700 km/h, 7x speed of sound
     background(c, t, drift=4)
     planet(c, W / 2, 1150, 420, t, light=(-0.8, -0.6), spin=0.12)
     glass_rain(c, t, n=120, speed=1.8, alpha=1.0, region=(0, 200, W, 1300), seed=9, length=170)
-    TW = wt(9, "8,700", 1.8); TS = wt(9, "SEVEN", 3.6)
+    TW = wt(9, "seven", 1.8); TS = wt(9, "nearly", 3.6)
     sticker(c, "HURRICANE!", W / 2, 330, 104, t - wt(9, "HURRICANE", 0.6), bg=hexc("E0303A"), outline=YELLOW)
-    if t > TW - 0.2: gauge(c, W / 2, 900, 330, lerp(0, 8700, eout((t - TW + 0.2) / 1.3)), 9000, t - TW + 0.2)
-    if t > TS: sticker(c, "7× SPEED OF SOUND", W / 2, 1060, 72, t - TS, bg=YELLOW, fg=INK, outline=PINK, ang=0.03)
-    if t > TW: tag(c, "Source: NASA Exoplanet Exploration (up to 5,400 mph)", t - TW)
+    if t > TW - 0.2: gauge(c, W / 2, 900, 330, lerp(0, 7000, eout((t - TW + 0.2) / 1.3)), 9000, t - TW + 0.2)
+    if t > TS: sticker(c, "~6× SPEED OF SOUND", W / 2, 1060, 72, t - TS, bg=YELLOW, fg=INK, outline=PINK, ang=0.03)
+    if t > TW: tag(c, "Source: NASA Goddard (7,000 km/h winds)", t - TW)
 
 
 def s10(c, t, d):  # M sandblasted. By a window.
@@ -637,7 +649,7 @@ def s10(c, t, d):  # M sandblasted. By a window.
 
 def s11(c, t, d):  # F over 1,000 degrees
     background(c, t)
-    TD = wt(11, "1,000", 0.9); h = eout((t - TD + 0.2) / 0.8) if t > TD - 0.2 else 0
+    TD = wt(11, "thousand", 0.9); h = eout((t - TD + 0.2) / 0.8) if t > TD - 0.2 else 0
     planet(c, 420, 880, 330, t, light=(-0.8, -0.6), heat=0.85 * h)
     thermo(c, 880, 1080, 620, 1000 * h, t + 0.2)
     if t > TD: sticker(c, counter(t - TD, 0, 1000, 0.7) + "°C+", W / 2, 360, 120, t - TD, bg=hexc("FF5A1F"), outline=YELLOW)
@@ -652,7 +664,7 @@ def s12(c, t, d):  # M one star, would not visit
 def s13(c, t, d):  # F one year = 2.2 days
     background(c, t)
     orbit_scene(c, t)
-    TD = wt(13, "2.2", 1.4)
+    TD = wt(13, "two", 1.4)
     sticker(c, "1 YEAR =", W / 2, 360, 90, t - wt(13, "YEAR", 0.5), bg=PURPLE, outline=CYAN)
     if t > TD: sticker(c, "2.2 DAYS", W / 2, 1110, 130, t - TD, bg=YELLOW, fg=INK, outline=PINK, ang=0.04)
     if t > TD + 0.3: tag(c, "Source: Scientific American / NASA", t - TD - 0.3)
@@ -669,24 +681,24 @@ def s14(c, t, d):  # M birthday every weekend
 
 def daynight(c, t, k):
     planet(c, W / 2, 860, 400, t, light=(-1.0, 0.0), terminator=k, spin=0.0, glints=0)
-    star(c, -80, 860, 150, t)
+    star(c, W + 80, 860, 150, t)
 
 
 def s15(c, t, d):  # F one side always faces its star
     background(c, t)
     daynight(c, t, eout(t / 1.2))
-    if t > wt(15, "DAY", 4.0): sticker(c, "ALWAYS DAY", 300, 400, 64, t - wt(15, "DAY", 4.0), bg=YELLOW, fg=INK, outline=PINK, ang=-0.04, maxw=520)
-    if t > wt(15, "NIGHT", 5.0): sticker(c, "ALWAYS NIGHT", 780, 1320 - 120, 64, t - wt(15, "NIGHT", 5.0), bg=PURPLE, outline=CYAN, ang=0.04, maxw=520)
-    if t > 0.8: tag(c, "Scientists think it is tidally locked (NASA heat map)", t - 0.8)
+    if t > wt(15, "DAY", 4.0): sticker(c, "ALWAYS DAY", 780, 400, 64, t - wt(15, "DAY", 4.0), bg=YELLOW, fg=INK, outline=PINK, ang=-0.04, maxw=520)
+    if t > wt(15, "NIGHT", 5.0): sticker(c, "ALWAYS NIGHT", 300, 1200, 64, t - wt(15, "NIGHT", 5.0), bg=PURPLE, outline=CYAN, ang=0.04, maxw=520)
+    if t > 0.8: tag(c, "Day/night: NASA Spitzer heat map", t - 0.8)
 
 
 def s16(c, t, d):  # M never sleeps / never breakfast
     background(c, t)
     daynight(c, t, 1.0)
-    sticker(c, "ALWAYS DAY", 300, 400, 64, 1, bg=YELLOW, fg=INK, outline=PINK, ang=-0.04, maxw=520)
-    sticker(c, "ALWAYS NIGHT", 780, 1200, 64, 1, bg=PURPLE, outline=CYAN, ang=0.04, maxw=520)
-    if t > wt(16, "SLEEPS", 1.2): stamp(c, "NO SLEEP", 330, 700, t - wt(16, "SLEEPS", 1.2), col=PINK, size=78, ang=-0.12)
-    if t > wt(16, "BREAKFAST", 3.0): stamp(c, "NO BREAKFAST", 760, 960, t - wt(16, "BREAKFAST", 3.0), col=YELLOW, size=70, ang=0.1)
+    sticker(c, "ALWAYS DAY", 780, 400, 64, 1, bg=YELLOW, fg=INK, outline=PINK, ang=-0.04, maxw=520)
+    sticker(c, "ALWAYS NIGHT", 300, 1200, 64, 1, bg=PURPLE, outline=CYAN, ang=0.04, maxw=520)
+    if t > wt(16, "SLEEPS", 1.2): stamp(c, "NO SLEEP", 760, 700, t - wt(16, "SLEEPS", 1.2), col=PINK, size=78, ang=-0.12)
+    if t > wt(16, "BREAKFAST", 3.0): stamp(c, "NO BREAKFAST", 330, 960, t - wt(16, "BREAKFAST", 3.0), col=YELLOW, size=70, ang=0.1)
 
 
 def s17(c, t, d):  # F Final ratings! Looks 10/10
@@ -729,13 +741,13 @@ def s_end(c, t, d):
 
 
 SCENES = [s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s_end]
-assert len(SCENES) == len(STARTS), (len(SCENES), len(STARTS))
+assert len(SCENES) == NSC + 1, len(SCENES)
 NO_FLASH = (10, 16, 18)   # continuous scenes
 
 
 def frame(c, gt, surf):
-    i = max(j for j in range(len(STARTS)) if STARTS[j] <= gt + 1e-9)
-    t = gt - STARTS[i]; d = DURS[i]
+    k = max(j for j in range(len(STARTS)) if STARTS[j] <= gt + 1e-9)
+    t = gt - STARTS[k]; d = DURS[k]; i = ORDER[k]
     c.set_source_rgb(*SPACE); c.paint()
     c.save()
     if i > 0 and t < 0.25 and i not in NO_FLASH:
@@ -744,30 +756,30 @@ def frame(c, gt, surf):
     c.restore()
     if i > 0 and i not in NO_FLASH: flash(c, t)
     badge_og(c, gt)
-    if i < len(meta):
-        captions(c, meta[i]["cap"], meta[i]["dur"], t, speaker=meta[i].get("speaker"), words=meta[i].get("words"))
+    if i in META:
+        m = META[i]; captions(c, m["cap"], m["dur"], t, speaker=m.get("speaker"), words=m.get("words"))
 
 
 def events():
-    s = STARTS; ev = [("boom", 0.0), ("crack", 0.05), ("pop", s[0] + wt(0, "SIDEWAYS", 1.4))]
-    ev += [("pop", x) for k, x in enumerate(s[1:], 1) if k not in NO_FLASH]
+    s = ST; ev = [("boom", 0.0), ("crack", 0.05), ("pop", s[0] + wt(0, "SIDEWAYS", 1.4))]
+    ev += [("pop", ST[o]) for o in ORDER[1:] if o not in NO_FLASH]
     ev += [("ding", s[1] + wt(1, "ONE", 0.9)), ("thunk", s[1] + wt(1, "DOWN", 1.7))]
     ev += [("ding", s[2] + 0.3), ("pop", s[2] + wt(2, "HD", 2.6))]
     ev += [("ding", s[3] + 0.2), ("scratch", s[3] + wt(3, "WIFI", 1.2))]
     ev += [("tick", s[4] + k * 0.13) for k in range(10)]
-    ev += [("tick", s[5] + wt(5, "63", 2.2) + k * 0.08) for k in range(8)] + [("ding", s[5] + wt(5, "63", 2.2) + 0.9)]
+    ev += [("tick", s[5] + wt(5, "sixty", 2.2) + k * 0.08) for k in range(8)] + [("ding", s[5] + wt(5, "sixty", 2.2) + 0.9)]
     ev += [("bubble", s[6] + 0.1), ("pop", s[7] + 0.02), ("crack", s[7] + wt(7, "blue", 0.6)), ("bubble", s[7] + wt(7, "MELTED", 2.0))]
     ev += [("clank", s[8] + wt(8, "CHANDELIER", 1.4) - 0.1), ("ding", s[8] + wt(8, "CHANDELIER", 1.4) + 0.1)]
-    ev += [("whoosh", s[9] + 0.2), ("whoosh", s[9] + 2.8), ("ding", s[9] + wt(9, "SEVEN", 3.6))]
+    ev += [("whoosh", s[9] + 0.2), ("whoosh", s[9] + 2.8), ("ding", s[9] + wt(9, "nearly", 3.6))]
     ev += [("crack", s[10] + wt(10, "SANDBLASTED", 1.4)), ("whoosh", s[10] + wt(10, "WINDOW", 2.4) - 0.3), ("crack", s[10] + wt(10, "WINDOW", 2.4) + 0.2)]
-    ev += [("tick", s[11] + wt(11, "1,000", 0.9) + k * 0.08) for k in range(8)] + [("ding", s[11] + wt(11, "1,000", 0.9) + 0.75)]
+    ev += [("tick", s[11] + wt(11, "thousand", 0.9) + k * 0.08) for k in range(8)] + [("ding", s[11] + wt(11, "thousand", 0.9) + 0.75)]
     ev += [("pop", s[12] + wt(12, "ONE", 1.4)), ("trombone", s[12] + wt(12, "Would", 2.2))]
-    ev += [("whoosh", s[13] + 0.4), ("ding", s[13] + wt(13, "2.2", 1.4))]
+    ev += [("whoosh", s[13] + 0.4), ("ding", s[13] + wt(13, "two", 1.4))]
     ev += [("bubble", s[14] + 0.1), ("pop", s[14] + wt(14, "BIRTHDAY", 0.9))]
     ev += [("thunk", s[16] + wt(16, "SLEEPS", 1.2)), ("thunk", s[16] + wt(16, "BREAKFAST", 3.0))]
     ev += [("ding", s[17] + 0.5), ("thunk", s[18] + wt(18, "hurricane", 1.0)), ("scratch", s[18] + wt(18, "windows", 2.0))]
-    ev += [("ding", s[19] + wt(19, "THANK", 1.6)), ("boom", s[19] + wt(19, "falling", 2.6) - 0.15), ("pop", s[20] + 0.5)]
-    return ev
+    ev += [("ding", s[19] + wt(19, "THANK", 1.6)), ("boom", s[19] + wt(19, "falling", 2.6) - 0.15), ("pop", s[NSC] + 0.5)]
+    return [e for e in ev if e[1] >= 0]
 
 
 if __name__ == "__main__":
