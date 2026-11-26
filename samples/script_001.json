@@ -1,0 +1,134 @@
+{
+ "voices": {
+  "F": {
+   "voice": "af_bella",
+   "speed": 1.03
+  },
+  "M": {
+   "voice": "am_puck",
+   "speed": 1.0
+  }
+ },
+ "lines": [
+  [
+   "There's a planet where it rains glass. Sideways.",
+   "There's a planet where it rains GLASS. SIDEWAYS.",
+   "F",
+   "urgent"
+  ],
+  [
+   "Sideways? Rain has one job. Down!",
+   "SIDEWAYS? Rain has ONE job. DOWN!",
+   "M",
+   "surprised"
+  ],
+  [
+   "Welcome to Orbit Gossip! Today's scandal: planet H D one eight nine, seven three three b.",
+   "Welcome to ORBIT GOSSIP! Today's scandal: planet HD 189733b.",
+   "F",
+   "excited"
+  ],
+  [
+   "That's not a name. That's a wifi password.",
+   "That's not a name. That's a WIFI PASSWORD.",
+   "M",
+   "playful"
+  ],
+  [
+   "Rude! It's a celebrity.",
+   "RUDE! It's a CELEBRITY.",
+   "F",
+   "playful"
+  ],
+  [
+   "Gorgeous though! Deep blue, like Earth. Sixty-three light-years away.",
+   "Gorgeous though! Deep BLUE, like Earth. 63 LIGHT-YEARS away.",
+   "F",
+   "excited"
+  ],
+  [
+   "Blue? So, oceans. Beaches. Tiny umbrellas in drinks?",
+   "BLUE? So, oceans. Beaches. Tiny umbrellas in drinks?",
+   "M",
+   "curious"
+  ],
+  [
+   "Nope. The blue is glass. Little drops of melted glass in the clouds.",
+   "Nope. The blue is GLASS. Little drops of MELTED GLASS in the clouds.",
+   "F",
+   "playful"
+  ],
+  [
+   "So the sky is basically... a chandelier.",
+   "So the sky is basically... a CHANDELIER.",
+   "M",
+   "serious"
+  ],
+  [
+   "A chandelier in a hurricane! Winds up to eight thousand seven hundred kilometres an hour. Seven times the speed of sound!",
+   "A chandelier in a HURRICANE! Winds up to 8,700 KM/H. SEVEN TIMES the speed of sound!",
+   "F",
+   "excited"
+  ],
+  [
+   "So you don't get wet. You get sandblasted. By a window.",
+   "So you don't get wet. You get SANDBLASTED. By a WINDOW.",
+   "M",
+   "serious"
+  ],
+  [
+   "Oh, and it's over a thousand degrees.",
+   "Oh, and it's over 1,000 DEGREES.",
+   "F",
+   "playful"
+  ],
+  [
+   "Hot, windy, raining glass. One star. Would not visit.",
+   "Hot, windy, raining glass. ONE STAR. Would not visit.",
+   "M",
+   "serious"
+  ],
+  [
+   "And one year there lasts just two point two days.",
+   "And one YEAR there lasts just 2.2 DAYS.",
+   "F",
+   "curious"
+  ],
+  [
+   "Two days?! I'd have a birthday every weekend!",
+   "2 DAYS?! I'd have a BIRTHDAY every WEEKEND!",
+   "M",
+   "excited"
+  ],
+  [
+   "And scientists think one side always faces its star. Endless day on one side, endless night on the other.",
+   "And scientists think ONE SIDE always faces its star. Endless DAY on one side, endless NIGHT on the other.",
+   "F",
+   "curious"
+  ],
+  [
+   "So half the planet never sleeps... and the other half never gets breakfast.",
+   "So half the planet NEVER SLEEPS... and the other half never gets BREAKFAST.",
+   "M",
+   "serious"
+  ],
+  [
+   "Final ratings! Looks: ten out of ten.",
+   "Final ratings! Looks: 10 OUT OF 10.",
+   "F",
+   "excited"
+  ],
+  [
+   "Personality: a hurricane full of windows.",
+   "Personality: a HURRICANE full of WINDOWS.",
+   "M",
+   "serious"
+  ],
+  [
+   "So next time it rains on you, say thank you. At least it's falling down.",
+   "So next time it rains on you, say THANK YOU. At least it's falling DOWN.",
+   "M",
+   "playful"
+  ]
+ ]
+}
