@@ -25,7 +25,7 @@ assert len(ORIG) == len(_meta), (len(ORIG), len(_meta))
 META = dict(zip(ORIG, _meta))
 meta = _meta
 NSC = len(_S["lines"])                                             # end card = scene NSC
-END = 2.4
+END = 2.0
 ORDER = ORIG + [NSC]
 STARTS = []; DURS = []; _t = 0
 for j in ORIG: STARTS.append(_t); DURS.append(META[j]["dur"]); _t += META[j]["dur"]
@@ -340,6 +340,7 @@ def camera_flashes(c, t, seed=2):
 
 
 def wifi_card(c, t, reveal):
+    """the joke: the planet's 'name' looks like a wifi PASSWORD -> it appears in the password field"""
     panel(c, 120, 520, 840, 560, t, col=hexc("F7F3FF"), a=0.97, edge=PINK)
     if t <= 0.15: return
     a = ease((t - 0.15) / 0.2)
@@ -347,12 +348,14 @@ def wifi_card(c, t, reveal):
     for j, rr in enumerate((90, 62, 34)):
         c.set_source_rgba(*PURPLE, a); c.set_line_width(14); c.arc(0, 40, rr, math.pi * 1.25, math.pi * 1.75); c.stroke()
     c.arc(0, 40, 10, 0, 2 * math.pi); c.fill(); c.restore()
-    text(c, "Join network?", W / 2, 760, 54, col=INK, alpha=a)
-    c.set_source_rgba(0.9, 0.88, 0.96, a); rrect(c, 180, 800, 720, 100, 18); c.fill()
-    text(c, "HD 189733b", W / 2, 868, 64, col=PURPLE, alpha=a)
-    c.set_source_rgba(0.9, 0.88, 0.96, a); rrect(c, 180, 930, 720, 100, 18); c.fill()
-    pw = "•" * 10 if reveal <= 0 else "pl4net_GL4SS!"
-    text(c, "Password: " + pw, W / 2, 998, 46, col=INK, alpha=a)
+    text(c, "Join \u201cSpace_Cafe_5G\u201d", W / 2, 760, 54, col=INK, alpha=a)
+    text(c, "Password", 200, 830, 34, col=(0.45, 0.42, 0.55), align="left", alpha=a)
+    c.set_source_rgba(0.9, 0.88, 0.96, a); rrect(c, 180, 845, 720, 110, 18); c.fill()
+    pw = "\u2022" * 10 if reveal <= 0 else "HD189733b"
+    text(c, pw, W / 2, 920, 70 if reveal > 0 else 60, col=PURPLE, alpha=a)
+    if reveal > 0:
+        c.set_source_rgba(0.18, 0.75, 0.44, ease(reveal / 0.3) * a); rrect(c, 330, 985, 420, 70, 35); c.fill()
+        text(c, "CONNECTED!", W / 2, 1032, 40, col=WHITE, alpha=ease(reveal / 0.3) * a)
 
 
 def beach_bubble(c, x, y, t, pop=-1.0):
@@ -561,6 +564,7 @@ def s2(c, t, d):   # F Welcome to Orbit Gossip! Today's scandal: HD 189733b
     planet(c, W / 2, 820, 300 + 10 * math.sin(t * 1.5), t, light=(-0.8, -0.6))
     burst(c, "EXCLUSIVE", 840, 560, 130, t - 0.25, size=38)
     TP = wt(2, "HD", 2.6)
+    if wt(2, "tea", 3.0) < t < wt(2, "scandal", 4.0): sticker(c, "SPILL THE TEA!", W / 2, 1150, 84, t - wt(2, "tea", 3.0), bg=PINK, outline=YELLOW, ang=-0.04)
     if t > TP: sticker(c, "HD 189733b", W / 2, 1180, 96, t - TP, bg=PURPLE, outline=CYAN)
     if t > wt(2, "scandal", 2.0): sticker(c, "TODAY'S SCANDAL", W / 2, 1060, 54, t - wt(2, "scandal", 2.0), bg=YELLOW, fg=INK, outline=PINK, ang=0.03)
     tag(c, "Image: NASA, ESA, M. Kornmesser (CC BY 4.0)", t - 0.3, y=1262)
@@ -568,8 +572,8 @@ def s2(c, t, d):   # F Welcome to Orbit Gossip! Today's scandal: HD 189733b
 
 def s3(c, t, d):   # M not a name, a wifi password
     background(c, t, dim=0.8)
-    wifi_card(c, t + 0.1, t - wt(3, "WIFI", 1.2))
-    if t > wt(3, "WIFI", 1.2): stamp(c, "WIFI PASSWORD?", W / 2, 1200, t - wt(3, "WIFI", 1.2), col=YELLOW, size=80, ang=-0.06)
+    wifi_card(c, t + 0.1, t - wt(3, "wifi", 1.2))
+    if t > wt(3, "password", 1.6): stamp(c, "THAT\u2019S A PASSWORD", W / 2, 1210, t - wt(3, "password", 1.6), col=YELLOW, size=76, ang=-0.06)
 
 
 def s4(c, t, d):   # F Rude! It's a celebrity.
