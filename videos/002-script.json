@@ -1,0 +1,119 @@
+{
+ "voices": {
+  "F": {
+   "el": "XrExE9yKIg1WjnnlVkGX",
+   "name": "Matilda"
+  },
+  "M": {
+   "el": "bIHbv24MWmeRgasZH58o",
+   "name": "Will"
+  }
+ },
+ "settings": {
+  "stability": 0.0
+ },
+ "tail": 0.12,
+ "tempo": 1.08,
+ "lines": [
+  [
+   "Venus has a day that's longer than her whole year.",
+   "VENUS has a DAY that's LONGER than her whole YEAR.",
+   "F",
+   "excited"
+  ],
+  [
+   "That's not a schedule. That's a cry for help.",
+   "That's not a SCHEDULE. That's a CRY FOR HELP.",
+   "M",
+   "surprised"
+  ],
+  [
+   "[mischievous] Grab your popcorn! [excited] It's Planet Reviews, and today we're swiping through Venus's dating profile!",
+   "Grab your POPCORN! It's PLANET REVIEWS, and today we're swiping through VENUS'S dating profile!",
+   "F",
+   "excited"
+  ],
+  [
+   "Ooh. Earth's twin, right? Same size, lives next door?",
+   "Ooh. EARTH'S TWIN, right? Same size, lives NEXT DOOR?",
+   "M",
+   "curious"
+  ],
+  [
+   "Same size, yes. But red flag number one. She spins so slowly, one day lasts two hundred forty-three Earth days.",
+   "Same size, yes. But RED FLAG #1. She spins so SLOWLY, one day lasts 243 EARTH DAYS.",
+   "F",
+   "mischievous"
+  ],
+  [
+   "Two hundred forty-three days? I'd text her on Monday, and she'd reply in August!",
+   "243 DAYS? I'd text her on MONDAY, and she'd reply in AUGUST!",
+   "M",
+   "surprised"
+  ],
+  [
+   "And her year is only two hundred twenty-five days. Her birthday comes before her bedtime!",
+   "And her YEAR is only 225 DAYS. Her BIRTHDAY comes before her BEDTIME!",
+   "F",
+   "excited"
+  ],
+  [
+   "Red flag number two. She spins backwards. On Venus, the Sun rises in the west.",
+   "RED FLAG #2. She spins BACKWARDS. On Venus, the SUN rises in the WEST.",
+   "F",
+   "playful"
+  ],
+  [
+   "So she's not late. She's just going the other way.",
+   "So she's not LATE. She's just going the OTHER WAY.",
+   "M",
+   "sarcastic"
+  ],
+  [
+   "Red flag number three. Her surface is nine hundred degrees Fahrenheit. Hot enough to melt lead.",
+   "RED FLAG #3. Her surface is NINE HUNDRED DEGREES Fahrenheit. Hot enough to MELT LEAD.",
+   "F",
+   "excited"
+  ],
+  [
+   "I thought hot meant cute! Not self-cleaning oven!",
+   "I thought HOT meant CUTE! Not SELF-CLEANING OVEN!",
+   "M",
+   "laughs"
+  ],
+  [
+   "Plus the air pushes down over ninety times harder than Earth's. Under clouds of sulfuric acid.",
+   "Plus the air pushes down over 90 TIMES harder than Earth's. Under clouds of SULFURIC ACID.",
+   "F",
+   "whispers"
+  ],
+  [
+   "Crushing, toxic, and needs eight months just to turn around. Swipe left.",
+   "CRUSHING, TOXIC, and needs EIGHT MONTHS just to TURN AROUND. SWIPE LEFT.",
+   "M",
+   "sarcastic"
+  ],
+  [
+   "Final rating! Looks: stunning. From really, really far away.",
+   "FINAL RATING! Looks: STUNNING. From really, really FAR AWAY.",
+   "F",
+   "playful"
+  ],
+  [
+   "Tomorrow on Planet Reviews: the star so dense, a sugar cube of it weighs as much as a mountain. Follow so you don't miss it!",
+   "TOMORROW on PLANET REVIEWS: the star so DENSE, a SUGAR CUBE of it weighs as much as a MOUNTAIN. FOLLOW so you don't miss it!",
+   "F",
+   "excited"
+  ],
+  [
+   "If Venus ever finishes her day.",
+   "If VENUS ever finishes her DAY.",
+   "M",
+   "mischievous"
+  ]
+ ],
+ "drop": [
+  8,
+  13
+ ]
+}
