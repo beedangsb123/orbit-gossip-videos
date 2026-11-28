@@ -29,3 +29,21 @@
 - Cross-promotion #1 (2026-11-27): one same-platform caption line on all four (TikTok @the.how.on.earth, IG
   @howonearth2026, FB How On Earth Page, YT How On Earth channel). Next one no earlier than ~2026-11-30.
 - ElevenLabs credits left after 002: 28806.
+
+## 003 — 2026-11-28 — Planet Reviews x "Real or Fake?": the neutron star (sugar cube = 1 billion tons)
+- Format: game show inside Planet Reviews — host reads 4 claims, reactor buzzes FAKE, everything is REAL (buzzers, verdict
+  cards, final rating). Voices Sarah (F, EXAVITQu4vr4xnSDxMaL) + Chris (M, iP95p4xoKVk53GoZ742B), eleven_v3, stability 0.0,
+  1,438 chars sent (lines 12 "Every family has one" and 14 "Fake!...Real? Oh, come on!" dropped in the edit), tempo 1.08.
+- Repeatable number: 1 billion tons (one sugar cube). Loop: "Still lighter than one sugar cube of her." -> hook.
+  End promise: tomorrow = Uranus, "the planet whose clouds smell like rotten eggs" (Planet Reviews).
+- 73.4 s, 47.8 MB, check_edges PASS (1st pass failed at 56 s: full-frame dim overlay on the alien beat -> limited to the panel).
+  videos/003-neutron-star-real-or-fake.mp4 (pipeline/render_003.py, videos/003-script.json). Music audio2 default +3, 112 bpm.
+- Images: NASA/JPL-Caltech pulsar concept PIA21085, magnetar concept PIA26274, Voyager 2 Uranus PIA18182 (public domain);
+  Crab Nebula PIA03606 = NASA, ESA, J. Hester & A. Loll (ASU), CC BY 4.0 (credited on screen + every caption).
+- Facts: NASA Science "Neutron Stars Are Weird" + NASA Imagine the Universe "Neutron Stars and Pulsars" (sugar cube ~1 billion
+  tons; heavier than the Sun, city-sized, ~20 km / 12.5 mi, Manhattan comparison; fastest pulsar PSR J1748-2446ad 43,000 spins/min
+  = twice a household blender; fields trillions x Earth's, magnetars another 1,000x; 1967 first pulsar "little green men").
+  Teaser: NASA JPL "What Uranus' cloud tops have in common with rotten eggs".
+- Scheduled slot C: 2026-11-29 09:00 Sydney (Sat 28 Nov 5 pm ET / 2 pm PT). Metricool ids: TikTok 445151091,
+  Instagram 445151098, Facebook 445151111, YouTube 445151121. No cross-promotion (last 2026-11-27; next ~2026-11-30+).
+- ElevenLabs credits left after 003: 27,731 (28,306 before).
