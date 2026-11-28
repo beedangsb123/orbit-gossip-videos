@@ -1,0 +1,131 @@
+{
+ "voices": {
+  "F": {
+   "el": "EXAVITQu4vr4xnSDxMaL",
+   "name": "Sarah"
+  },
+  "M": {
+   "el": "iP95p4xoKVk53GoZ742B",
+   "name": "Chris"
+  }
+ },
+ "settings": {
+  "stability": 0.0
+ },
+ "tail": 0.12,
+ "tempo": 1.08,
+ "lines": [
+  [
+   "A sugar cube of this star weighs one billion tons.",
+   "A SUGAR CUBE of this star weighs 1 BILLION TONS.",
+   "F",
+   "excited"
+  ],
+  [
+   "One billion tons? That's not a sugar cube, that's a cheat day!",
+   "1 BILLION TONS? That's not a SUGAR CUBE, that's a CHEAT DAY!",
+   "M",
+   "surprised"
+  ],
+  [
+   "[laughs] Buzzers ready! [excited] It's Planet Reviews, and today's guest is a neutron star. Real or fake?",
+   "BUZZERS READY! It's PLANET REVIEWS, and today's guest is a NEUTRON STAR. REAL or FAKE?",
+   "F",
+   "excited"
+  ],
+  [
+   "Claim one. She's heavier than our Sun, but only about twelve miles across. The size of a city.",
+   "CLAIM #1. She's HEAVIER than our SUN, but only about 12 MILES across. The size of a CITY.",
+   "F",
+   "playful"
+  ],
+  [
+   "Fake. Nobody fits a whole Sun into a city. I can't even fit my couch in my apartment.",
+   "FAKE. Nobody fits a whole SUN into a CITY. I can't even fit my COUCH in my APARTMENT.",
+   "M",
+   "sarcastic"
+  ],
+  [
+   "Real! Squished down to about the size of Manhattan.",
+   "REAL! Squished down to about the size of MANHATTAN.",
+   "F",
+   "excited"
+  ],
+  [
+   "Claim two. The fastest one spins forty-three thousand times a minute.",
+   "CLAIM #2. The FASTEST one spins 43,000 TIMES A MINUTE.",
+   "F",
+   "mischievous"
+  ],
+  [
+   "Okay, that's fake. That's faster than my blender.",
+   "Okay, that's FAKE. That's faster than my BLENDER.",
+   "M",
+   "curious"
+  ],
+  [
+   "Real! Twice as fast as your blender. She's basically a smoothie with a pulse.",
+   "REAL! TWICE as fast as your BLENDER. She's basically a SMOOTHIE with a PULSE.",
+   "F",
+   "laughs"
+  ],
+  [
+   "Claim three. Her magnetic field is trillions of times stronger than Earth's.",
+   "CLAIM #3. Her MAGNETIC FIELD is TRILLIONS of times stronger than EARTH'S.",
+   "F",
+   "playful"
+  ],
+  [
+   "Fine. Real. Keep her away from my credit cards.",
+   "Fine. REAL. Keep her away from my CREDIT CARDS.",
+   "M",
+   "sarcastic"
+  ],
+  [
+   "And a magnetar, her angry cousin, is another thousand times stronger.",
+   "And a MAGNETAR, her ANGRY COUSIN, is another 1,000 TIMES stronger.",
+   "F",
+   "whispers"
+  ],
+  [
+   "Every family has one.",
+   "Every FAMILY has one.",
+   "M",
+   "laughs"
+  ],
+  [
+   "Final claim. When astronomers first caught her blinking in nineteen sixty-seven, they nicknamed the signal little green men.",
+   "FINAL CLAIM. When astronomers first caught her BLINKING in 1967, they nicknamed the signal LITTLE GREEN MEN.",
+   "F",
+   "mischievous"
+  ],
+  [
+   "Fake! ...Real? Oh, come on!",
+   "FAKE! ...REAL? Oh, COME ON!",
+   "M",
+   "surprised"
+  ],
+  [
+   "Real. Final rating: ten out of ten for drama. Zero out of ten as a sweetener.",
+   "REAL. FINAL RATING: 10/10 for DRAMA. 0/10 as a SWEETENER.",
+   "F",
+   "playful"
+  ],
+  [
+   "Tomorrow on Planet Reviews: the planet whose clouds smell like rotten eggs. Follow so you don't miss it!",
+   "TOMORROW on PLANET REVIEWS: the planet whose CLOUDS smell like ROTTEN EGGS. FOLLOW so you don't miss it!",
+   "F",
+   "excited"
+  ],
+  [
+   "Still lighter than one sugar cube of her.",
+   "Still LIGHTER than one SUGAR CUBE of her.",
+   "M",
+   "mischievous"
+  ]
+ ],
+ "drop": [
+  12,
+  14
+ ]
+}
