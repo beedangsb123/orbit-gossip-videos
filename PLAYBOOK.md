@@ -1,7 +1,7 @@
 # Orbit Gossip — PLAYBOOK (read fully every run, follow exactly)
 
 **Niche:** space, but make it gossip. Wild TRUE stories about planets, stars, moons, black holes, space missions and
-astronauts' daily life, told as a celebrity-gossip show about space objects. ~70 s Shorts/Reels/TikToks, faceless.
+astronauts' daily life, told as a celebrity-gossip show about space objects. 50–60 s Shorts/Reels/TikToks, faceless (Bidhan 2026-11-28; videos 001–003 stay as made).
 **Owner:** Bidhan (Sydney time). Sister channel of How On Earth (natural wonders / mega-builds) — never cover Earth
 landmarks, geography or mega-builds here.
 **Goal:** grow to real income (platform payouts + sponsors/affiliates: telescopes, astronomy apps, learning apps, books).
@@ -22,7 +22,7 @@ landmarks, geography or mega-builds here.
 - **ElevenLabs credits:** before generating, check credits. If they are too low for today's script (or the API fails),
   push-notify Bidhan ("ElevenLabs credits low/out — X left") AND tell him in the message; then render with the free
   kokoro voice (pipeline/tts_kok.py) so the day isn't missed. The key is shared with How On Earth (Starter plan,
-  40,000 characters/month, resets monthly). Keep scripts ~1,000–1,200 characters.
+  40,000 characters/month, resets monthly). Keep scripts ~850–1,000 characters (50–60 s videos).
 - Don't spend money, change account settings or run ads without asking.
 - **Cross-promotion (Bidhan 2026-11-26):** occasionally (1–2x/week, not daily) Orbit Gossip promotes How On Earth and
   vice versa — **same platform only**: Facebook→Facebook Page, Instagram→@howonearth2026, TikTok→@the.how.on.earth,
@@ -49,7 +49,7 @@ landmarks, geography or mega-builds here.
 - Set "voices": {"F": {"el": id}, "M": {"el": id}} in the script; only real v3 tags via emotions: excited, surprised,
   curious, playful, sarcastic, laughs, mischievous, whispers, sighs.
 - Caption words must match spoken words 1:1 (write "Sixty-three light-years" ↔ "63 LIGHT-YEARS"). Numbers spoken as words.
-- Fit 61–75 s total (incl. 2.4 s end card): use "tail": 0.12, "tempo" ≤ 1.08, and "drop" for lines to cut (no extra credits
+- Fit 50–60 s total (incl. 2.4 s end card; Bidhan 2026-11-28): use "tail": 0.12, "tempo" ≤ 1.08, and "drop" for lines to cut (no extra credits
   with --reuse). Render code must use original line numbers (see render_001.py ORIG/META/ST handling).
 
 ## Look v1 "tabloid cosmos" (pipeline/render_001.py is the reference render)

@@ -39,3 +39,4 @@
   draw (buzzers, verdict cards). Keep the series banner + end promise.
 - Hook frame: real NASA image in a rounded panel (not full-bleed) keeps check_edges happy; never darken the full frame.
 - ElevenLabs charged ~575 credits for a 1,438-char v3 dialogue this time (v3 billing seems discounted) — keep checking.
+- Bidhan 2026-11-28: from video 004 on, videos are 50–60 s total (incl. end card), scripts ~850–1,000 chars, ~12–14 lines. 001–003 stay as made.
